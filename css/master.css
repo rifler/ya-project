@@ -1,0 +1,132 @@
+body {
+    width: 100%;
+    min-width: 650px;
+    background-image: url('../pic/body-bg.gif');
+    color: #444;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+}
+
+/* links */
+
+a img {
+    border: none;
+}
+
+a:link,
+a:visited {
+    outline: none;
+    color: #369;
+}
+
+a:hover {
+    color: #39C;
+}
+
+/* Структура страницы
+-----------------------------------*/
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 24%;
+    min-width: 156px;
+    height: 100%;
+    max-height: 100%;
+    overflow: auto;
+    background-color: #333;
+    background: url(../pic/sidebar.jpg);
+}
+
+    #sidebar .main-nav {
+        margin-top: 20px;
+    }
+
+    #sidebar ul li a {
+        display: block;
+        padding: 7px;
+        border-top: 1px solid #555;
+        border-bottom: 1px solid #2E2E2E;
+        font-size: 13px;
+        color: #BABABA;
+        text-decoration: none;
+        -webkit-transition: background .3s linear;
+           -moz-transition: background .3s linear;
+             -o-transition: background .3s linear;
+                transition: background .3s linear;
+    }
+
+    #sidebar .submenu li a {
+        padding-left: 20px;
+    }
+
+    #sidebar ul li a:hover,
+    #sidebar ul li a.current {
+        background-color: #000;
+        background: -webkit-linear-gradient(top, rgba(120, 120, 120, 0.4) 0%,rgba(120, 120, 120, 0.3) 100%);
+        background: -moz-linear-gradient(top, rgba(120, 120, 120, 0.4) 0%,rgba(120, 120, 120, 0.3) 100%);
+        background: -o-linear-gradient(top, rgba(120, 120, 120, 0.4) 0%,rgba(120, 120, 120, 0.3) 100%);
+        background: linear-gradient(top, rgba(120, 120, 120, 0.4) 0%,rgba(120, 120, 120, 0.3) 100%);
+        color: #f4f4f4;
+    }
+
+#content {
+    margin-left: 24%;
+    padding: 30px 0 0 15px;
+}
+
+    #content .container {
+        margin-left: 20px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    #content h1 {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #DDD;
+        font-family: 'Cuprum';
+        font-size: 21px;
+        font-weight: 700;
+        color: #B55D5C;
+    }
+
+    #content h2 {
+        margin-top: 10px;
+        margin-bottom: 7px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #DDD;
+        font-family: 'Cuprum';
+        font-size: 17px;
+        font-weight: 700;
+        color: #B55D5C;
+    }
+
+    #content .container .desc {
+        margin-left: 20px;
+        padding-right: 20px;
+        line-height: 21px;
+    }
+
+        .desc ul li {
+            padding: 3px 0;
+            -webkit-transition: background-color 0.3s ease;
+               -moz-transition: background-color 0.3s ease;
+                 -o-transition: background-color 0.3s ease;
+                    transition: background-color 0.3s ease;
+        }
+
+        .desc ul li:hover {
+            background-color: #EFF0F3;
+            background-color: rgba(0,0,0,.15);
+        }
+
+/* очищающийся контейнер для плавающих элементов */
+
+.group:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
