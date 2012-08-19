@@ -121,6 +121,22 @@ a:hover {
             background-color: rgba(0,0,0,.15);
         }
 
+.show-code {
+    display: none;
+    font-size: 13px;
+    text-decoration: none;
+    border-bottom: 1px dashed;
+}
+
+pre {
+    margin: 0 15px 10px 0;
+    white-space: pre-wrap;
+}
+
+.hide {
+    display: none;
+}
+
 /* очищающийся контейнер для плавающих элементов */
 
 .group:after {

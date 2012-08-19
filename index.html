@@ -165,13 +165,329 @@
 			<div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 			</div>
 			<h2><a name="js-task">Предположим, что мы представляем автосалон по продаже японских и немецких автомобилей. Допишите недостающий код.</a></h2>
-			<div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<div class="desc">
+				<h3>Javascript:</h3>
+				<a href="#" class="show-code"><span>Показать код</span><span class="hide">Спрятать</span></a>
+				<pre><code class="javascript">/**
+ * Создает экземпляр Машины
+ * @this {Car}
+ * @param {string} manufacturer Производитель
+ * @param {string} model Модель
+ * @param {number} year Год производство
+ */
+function Car(manufacturer, model, year) {
+    this.manufacturer = manufacturer;
+    this.model = model;
+    this.year = year || (new Date()).getFullYear();
+}
+
+Car.prototype.toString = function() {
+    return this.manufacturer + ' ' + this.model + ' ' + this.year;
+}
+
+/**
+ * Вывести информацию о машине
+ */
+Car.prototype.getInfo = function() {
+    return ''+this;
+}
+
+/**
+ * Вывести подробную информацию о машине
+ */
+Car.prototype.getDetailedInfo = function() {
+    return 'Производитель: '+this.manufacturer + '. Модель: ' + this.model + '. Год: ' + this.year;
+}
+
+var bmw = new Car("BMW", "X5", 2010),
+    audi = new Car("Audi", "Q5", 2012),
+    toyota = new Car("Toyota", "Camry");
+
+console.log('' + bmw); // BMW X5 2010
+console.log(bmw.getInfo()); // BMW X5 2010
+console.log(toyota.getDetailedInfo()); // Производитель: BMW. Модель: X5. Год: 2010
+
+/**
+ * Создает экземпляр Автосалона
+ * @this {CarDealer}
+ * @param {string} name Название автосалона
+ */
+function CarDealer(name) {
+    this.name = name;
+    this.cars = [];
+    this.currencyAlias = {};
+    this.currencyAlias['€'] = 'eur';
+    this.currencyAlias['¥'] = 'jpy';
+}
+
+/**
+ * Добавить машину в автосалон
+ */
+CarDealer.prototype.add = function () {
+    /* Без проверки типа */
+    /*
+    var args = [].slice.call(arguments);
+    this.cars = this.cars.concat(args);
+    
+    return this;
+    */
+
+    /* С проверкой типа */
+    for (var i = 0; i < arguments.length; i++) {
+        if (arguments[i] instanceof Car) {
+            this.cars.push(arguments[i]);
+        }
+    }
+
+    return this;
+}
+
+var yandex = new CarDealer('Яндекс.Авто');
+
+yandex
+    .add(toyota)
+    .add(bmw, audi);
+
+
+function isNumeric(n) {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+/**
+ * Установить цену на машину
+ * @param {string} car идентификатор машины
+ * @param {string} price стоимость
+ */
+// идентификатор машины составляется следующим образом "производитель модель год"
+// стоимость машины может быть задана в двух валютах: йена и евро.
+CarDealer.prototype.setPrice = function (car, price) {
+    var currency = price[0],
+        priceValue = price.slice(1);
+
+    if ((currency === '€' || currency === '¥') && isNumeric(priceValue)) {
+        for (var i = 0; i < this.cars.length; i++) {
+            if (car.toLowerCase() === (''+this.cars[i]).toLowerCase()) {
+                this.cars[i].currency = this.currencyAlias[currency];
+                this.cars[i].price = +priceValue;
+                break;
+            }
+        }
+    }
+
+    return this;
+}
+
+yandex
+    .setPrice('BMW X5 2010', '€2000')
+    .setPrice('Audi Q5 2012', '€3000')
+    .setPrice('Toyota Camry 2012', '¥3000');
+
+function getCountry() {
+    switch (this.manufacturer.toLowerCase()) {
+        case 'bmw':
+    	case 'audi':
+                return 'Germany';
+
+        case 'toyota':
+            return 'Japan';
+
+	}
+}
+
+Car.prototype.getCountry = getCountry;
+
+/**
+ * Вывод списка автомобилей
+ */
+CarDealer.prototype.list = function () {
+    var result = [];
+    for (var i = 0; i < this.cars.length; i++) {
+        result.push('' + this.cars[i]);
+    }
+
+    return result.join(', ');
+}
+
+/**
+ * Вывод списка автомобилей с фильтрацией по стране производителю
+ * @param {string} countryName страна-производитель автомобиля
+ */
+CarDealer.prototype.listByCountry = function (countryName) {
+    var result = [];
+    for (var i = 0; i < this.cars.length; i++) {
+        if (countryName.toLowerCase() == this.cars[i].getCountry().toLowerCase()) {
+            result.push(this.cars[i]);
+        }
+    }
+
+    return result.join(', ');
+}
+
+/**
+ * Вывод списка автомобилей с ценой в рублях
+ * @param {object} exchangeList объект с обменными курсами евро и йены к рублю
+ */
+CarDealer.prototype.listWithRurPrice = function (exchangeList) {
+    var result = [];
+    for (var i = 0; i < this.cars.length; i++) {
+	   result.push(''+this.cars[i]+' '+(exchangeList[this.cars[i].currency]*this.cars[i].price)+' руб.');
+    }
+
+    return result.join(', ');
+}
+
+console.log(yandex.list()); //BMW X5 2010, Audi Q5 2012, Toyota Camry 2012
+console.log(yandex.listByCountry('Germany')); //BMW X5 2010, Audi Q5 2012
+console.log(yandex.listWithRurPrice({eur: 35, jpy: 40}));//BMW X5 2010 70000 руб, Audi Q5 2012 105000 руб, Toyota Camry 2012 120000</code></pre>
 			</div>
 			<h2><a name="find">Найдите все текстовые файлы (*.txt), в имени которых содержится «yandex», а в содержимом — «школа разработки интерфейсов».</a></h2>
-			<div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<div class="desc">
+				<h3>Bash:</h3>
+				<a href="#" class="show-code"><span>Показать код</span><span class="hide">Спрятать</span></a>
+				<pre><code class="bash">#если нужно искать без учета регистра, то нужно добавить опцию -i к команде grep
+find ./ -type f -name '*yandex*.txt' | xargs grep -l 'школа разработки интерфейсов'
+				</code></pre>
 			</div>
 			<h2><a name="verbose">Дана программа, реализованная одновременно на Bash, Python и Perl. Программа принимает произвольное количество аргументов и печатает их количество. Нужно добавить опцию -v для verbose-режима, в котором дополнительно выводится значение каждого из аргументов</a></h2>
-			<div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<div class="desc">
+				<h3>Bash:</h3>
+				<a href="#" class="show-code"><span>Показать код</span><span class="hide">Спрятать</span></a>
+				<pre><code class="bash">#!/bin/bash
+
+usage() {
+cat << EOF
+Usage: printargs.sh [OPTIONS] [ARGUMENTS]
+  Print the number of arguments.
+
+OPTIONS:
+  -h      print help message
+  -m MSG  custom message
+
+Examples:
+  printargs.sh a b c
+  printargs.sh -m 'Arguments count: ' a b c
+  printargs.sh -h
+
+EOF
+}
+
+V_FLAG=false
+
+while getopts “h:m:v” OPTION
+do
+    case $OPTION in
+        h)
+            usage
+            exit 1
+            shift;;
+        m)
+            MESSAGE=$OPTARG
+            shift;shift;;
+        v)
+    	    V_FLAG=true
+    	    shift;;
+    esac
+done
+
+COUNT=0
+
+for ARG in $@; do
+    if $V_FLAG ; then
+    	echo $ARG
+    fi
+    let COUNT+=1
+done
+
+if [[ "$MESSAGE" != "" ]]; then
+    echo $MESSAGE
+fi
+
+echo $COUNT</code></pre>
+<h3>Python:</h3>
+<a href="#" class="show-code"><span>Показать код</span><span class="hide">Спрятать</span></a>
+				<pre><code class="python">#!/usr/bin/env python
+
+import argparse
+
+parser = argparse.ArgumentParser(description = 'Print the number of arguments.')
+parser.add_argument('arguments', metavar = 'ARG', type = str, nargs = '*', help = 'some arguments')
+parser.add_argument('-m', dest = 'message', default = '', help = 'custom message')
+parser.add_argument("-v", "--verbose", action = "store_true")
+
+args = parser.parse_args()
+
+count = 0
+
+for a in args.arguments:
+    if args.verbose:
+    	print(a),
+    count += 1
+
+if args.message != '':
+    print(args.message)
+
+print
+print(count)</code></pre>
+<h3>Perl:</h3>
+<a href="#" class="show-code"><span>Показать код</span><span class="hide">Спрятать</span></a>
+<pre><code class="perl">#!/usr/bin/perl
+
+use strict;
+use Getopt::Long;
+use Pod::Usage;
+
+my $help;
+my $message = '';
+my $verbose;
+my $param;
+
+@ARGV and GetOptions(
+    "h" => \$help,
+    "m:s" => \$message,
+    "v" => \$verbose,
+) or pod2usage(3);
+pod2usage(-verbose => 2, -exitval => 2) if $help;
+
+my $count = 0;
+
+foreach $param(@ARGV) {
+    if ($verbose) {
+	   print $param."\n"
+    }
+    $count++;
+}
+
+if($message ne "") {
+    print($message . "\n");
+}
+
+print($count . "\n");
+
+__END__
+
+=head1 NAME
+
+    printargs.pl - Print the number of arguments.
+
+=head1 SYNOPSIS
+
+    printargs.pl [options] [arguments]
+
+=head1 OPTIONS
+
+    -h      Show help message.
+
+    -m MSG  Specify a custom message.
+
+
+=head1 EXAMPLE
+
+    printargs.sh a b c
+
+    printargs.sh -m 'Arguments count: ' a b c
+
+    printargs.sh -h
+</code></pre>
 			</div>
 			<h2><a name="learn">Расскажите, в каком объёме и при каких обстоятельствах вы изучали следующие темы: языки программирования (императивные/декларативные, разные системы типов), структуры (классы, структуры данных, примитивные типы), парадигмы (события, ООП, параллельность/асинхронность, кеширование), алгоритмы (парсинг, сортировка, поиск), паттерны</a></h2>
 			<div class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
