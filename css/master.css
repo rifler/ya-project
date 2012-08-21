@@ -146,3 +146,68 @@ pre {
     clear: both;
     visibility: hidden;
 }
+
+@media screen and (max-width: 650px) {
+
+    body {
+        min-width: 1px;
+        font-size: 10px;
+    }
+
+    #sidebar {
+        position: static;
+        height: auto;
+        width: auto;
+        min-width: 1px;
+    }
+
+        #sidebar .main-nav {
+            margin-top: 0;
+        }
+
+        #sidebar ul li a {
+            padding: 5px;
+            font-size: 11px;
+        }
+
+    #content {
+        position: static;
+        margin: 0;
+        padding: 10px 0 0 10px;
+    }
+
+        #content .container {
+            margin-left: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+            #content .container .desc {
+                margin-left: 15px;
+                padding-right: 15px;
+                line-height: 19px;
+            }
+
+        #content h1 {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            font-family: 'Cuprum';
+            font-size: 19px;
+        }
+
+        #content h2 {
+            margin-top: 5px;
+            margin-bottom: 7px;
+            padding-bottom: 2px;
+            font-size: 15px;
+        }
+
+    .show-code {
+        font-size: 11px;
+    }
+
+    pre {
+        margin: 0 10px 5px 0;
+        white-space: pre-wrap;
+    }
+}
