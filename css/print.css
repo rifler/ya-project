@@ -1,0 +1,38 @@
+#sidebar {
+	display: none;
+}
+
+#content {
+	margin: 0;
+}
+
+#content .container {
+	font-size: 14px;
+	margin-left: 20px;
+}
+
+.container .desc {
+	line-height: 15px;
+	margin-left: 20px;
+}
+
+.container .desc h2 {
+	font-size: 14px;
+}
+
+#content h3 {
+	font-size: 17px;
+	font-weight: 700;
+	margin-top: 10px;
+	margin-bottom: 7px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #DDD;
+}
+
+.show-code span {
+	display: none;
+}
+
+pre {
+	display: block;
+}
